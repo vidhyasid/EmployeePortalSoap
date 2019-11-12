@@ -1,0 +1,90 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsd="http://localhost:8080/types"
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	targetNamespace="http://localhost:8080/types"
+	elementFormDefault="qualified">
+	<simpleType name="String30">
+		<restriction base="string">
+			<maxLength value="30"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="Picture">
+		<restriction base="base64Binary">			
+		</restriction>
+	</simpleType>		
+	<simpleType name="String20">
+		<restriction base="string">
+			<maxLength value="20"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="String10">
+		<restriction base="string">
+			<maxLength value="10"/>
+		</restriction>
+	</simpleType>
+	<complexType name="SecurityInformation">
+		<sequence>
+			<element name="Department" type="xsd:String30" minOccurs="1" maxOccurs="1"/>
+			<element name="Username" type="xsd:String30" minOccurs="1" maxOccurs="1"/>
+			<element name="Password" type="xsd:String30" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+	<complexType name="SalaryDetails">
+		<sequence>
+			<element name="BasicPay" type="xsd:String20" minOccurs="1" maxOccurs="1"/>
+			<element name="HRA" type="xsd:String20" minOccurs="1" maxOccurs="1"/>
+			<element name="TravelAllowance" type="xsd:String20" minOccurs="1" maxOccurs="1"/>
+			<element name="MedicalAllowance" type="xsd:String20" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>	
+	<complexType name="FileAttachment">
+		<sequence>
+			<element name="FileName" type="xsd:String30"  minOccurs="1" maxOccurs="1"/>
+			<element name="FileContent" type="xsd:Picture" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+	<complexType name="EmployeeWithoutSalary">
+		<sequence>
+			<element name="FirstName" type="xsd:String30" minOccurs="1" maxOccurs="1"/>
+			<element name="LastName" type="xsd:String30" minOccurs="1" maxOccurs="1"/>
+			<element name="DateOfBirth" type="xsd:String10" minOccurs="1" maxOccurs="1"/>
+			<element name="EmployeeId" type="xsd:String10" minOccurs="0" maxOccurs="1"/>
+			<element name="ProfilePicture" type="xsd:FileAttachment" minOccurs="0" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+	<complexType name="EmployeeWithSalary">
+		<sequence>
+			<element name="FirstName" type="xsd:String30" minOccurs="1" maxOccurs="1"/>
+			<element name="LastName" type="xsd:String30" minOccurs="1" maxOccurs="1"/>
+			<element name="DateOfBirth" type="xsd:String10" minOccurs="1" maxOccurs="1"/>
+			<element name="EmployeeId" type="xsd:String10" minOccurs="0" maxOccurs="1"/>
+			<element name="ProfilePicture" type="xsd:FileAttachment" minOccurs="0" maxOccurs="1"/>
+			<element name="EmployeeSalaryDetails" type="xsd:SalaryDetails" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+	<complexType name="CreateEmployeeRequestWithSecurity">
+		<sequence>
+			<element name="SecurityCredentials" type="xsd:SecurityInformation" minOccurs="1" maxOccurs="1"/>
+			<element name="EmployeeWithoutSalary" type="xsd:EmployeeWithoutSalary" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+	<element name="CreateEmployeeRequest" type="xsd:CreateEmployeeRequestWithSecurity"/>
+	<element name="CreateEmployeeResponse" type="xsd:EmployeeWithoutSalary"/>
+	<complexType name="UpdateEmployeeSalaryRequestWithSecurity">
+		<sequence>
+			<element name="SecurityCredentials" type="xsd:SecurityInformation" minOccurs="1" maxOccurs="1"/>
+			<element name="EmployeeWithSalary" type="xsd:EmployeeWithSalary" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+	<element name="UpdateEmployeeSalaryRequest" type="xsd:UpdateEmployeeSalaryRequestWithSecurity"/>
+	<element name="UpdateEmployeeSalaryResponse" type="xsd:EmployeeWithSalary"/>
+	<complexType name="GetEmployeeRequestWithSecurity">
+		<sequence>
+			<element name="SecurityCredentials" type="xsd:SecurityInformation" minOccurs="1" maxOccurs="1"/>
+			<element name="EmployeeId" type="xsd:String10" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+	<element name="GetEmployeeRequest" type="xsd:GetEmployeeRequestWithSecurity"/>
+	<element name="GetEmployeeHrResponse" type="xsd:EmployeeWithoutSalary"/>
+	<element name="GetEmployeeAccountResponse" type="xsd:EmployeeWithSalary"/>
+</schema>
